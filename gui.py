@@ -10,24 +10,27 @@ class Application(Frame):
 
     def createWidgets(self):
         self.helloLable = Label(self, text='hello, world')
-        self.conButton = Button(self, text='ClientConnect', command=self.connect)
+        self.conButton = Button(self, text='ClientConnect', command=self.client_connect)
         self.quitButton = Button(self, text='quit', command=self.quit)
         self.helloLable.pack()
         self.conButton.pack()
         self.quitButton.pack()
 
     def connect(self):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # 建立连接:
-        s.connect(('127.0.0.1', 9999))
-        # 接收欢迎消息:
-        print(s.recv(1024).decode('utf-8'))
-        for data in [b'Michael', b'Tracy', b'Sarah']:
-            # 发送数据:
-            s.send(data)
-            print(s.recv(1024).decode('utf-8'))
-        s.send(b'exit')
-        s.close()
+        t = threading.Thread(target=client_connect, args=(self,))
+        t.start()
+        t.join()
+        # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # # 建立连接:
+        # s.connect(('127.0.0.1', 9999))
+        # # 接收欢迎消息:
+        # print(s.recv(1024).decode('utf-8'))
+        # for data in [b'Michael', b'Tracy', b'Sarah']:
+        #     # 发送数据:
+        #     s.send(data)
+        #     print(s.recv(1024).decode('utf-8'))
+        # s.send(b'exit')
+        # s.close()
 
     def client_connect(self):
         # ipv4
